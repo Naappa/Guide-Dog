@@ -66,15 +66,18 @@ def main():
     detector = ObjectDetector()
     fps_counter = FPSCounter()
 
+    #STM32과 Serial 통신을 시작
     stm32 = STM32Comm(
         port="/dev/ttyACM0",
         baudrate=115200,
         timeout=0.01
     )
+    #STM32 통신 스레드 따로 시작
     stm32.start()
-
+    #화면 창 준비
     setup_window()
 
+    #명령 중복 전송 방지 변수
     last_command = None
     last_command_time = 0
 
@@ -86,16 +89,16 @@ def main():
                 print("Camera frame not received.")
                 break
 
-            # 1. YOLO detection stays in the main loop.
+            # 1. 현재 프레임에서 객체를 탐지
             detections = detector.detect(frame)
 
-            # 2. Get latest STM32 ultrasonic value without waiting.
+            # 2. STM32에서 가장 최근에 받아 저장되어 있는 거리값만 가져옴
             distance_cm = stm32.get_latest_distance()
 
-            # 3. Decide command using sensor data + YOLO result.
+            # 3. 초음파 거리값과 YOLO 탐지 결과를 보고 어떤 명령을 보낼지 결정
             command = decide_command(distance_cm, detections)
 
-            # 4. Send command only when changed or after interval.
+            # 4. 명령이 이전 명령과 다를 때, 마지막 전송 후 최소 COMMAND_INTERVAL_SEC가 지났는지 확인 후 보냄
             now = time.time()
             if command != last_command and now - last_command_time >= COMMAND_INTERVAL_SEC:
                 stm32.send_command(command)
@@ -103,7 +106,7 @@ def main():
                 last_command_time = now
                 print("Sent command:", command, "distance:", distance_cm)
 
-            # Print detection information.
+            # 탐지 결과 출력
             for det in detections:
                 print(
                     det["class_name"],
@@ -113,17 +116,18 @@ def main():
                     det["center"]
                 )
 
-            # Draw results.
+            # 화면에 결과 그리기
             frame = draw_detections(frame, detections)
             frame = draw_distance(frame, distance_cm)
 
-            # FPS.
+            # FPS
             fps = fps_counter.calculate()
             frame = draw_fps(frame, fps)
 
-            # Show frame.
+            # 화면 출력
             show_frame(frame)
 
+            # q를 누르면 프로그램이 종료
             key = cv2.waitKey(1)
             if key == ord("q"):
                 break
