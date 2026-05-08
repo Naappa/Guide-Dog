@@ -10,33 +10,39 @@ from fps_counter import FPSCounter
 from stm32_comm import STM32Comm
 
 
-# Change these command strings to match your STM32 firmware.
+# Raspberry Pi가 STM32로 보낼 명령
 CMD_FORWARD = "FORWARD"
 CMD_STOP = "STOP"
 
-# Stop if ultrasonic distance is closer than this value.
+# 초음파 센서 거리값이 50cm보다 작으면 멈추기
 STOP_DISTANCE_CM = 50.0
 
-# Do not send the same command too often.
+# 최소 0.2초 간격을 두고 명령 보내기
 COMMAND_INTERVAL_SEC = 0.2
 
-
+#센서값과 YOLO 탐지 결과를 이용해서 STM32에 어떤 명령을 보낼지
 def decide_command(distance_cm, detections):
     """
-    Decide what command to send to STM32.
-
-    Current simple logic:
-    - If ultrasonic sensor says something is closer than STOP_DISTANCE_CM: STOP
-    - Otherwise: FORWARD
-
-    Later, you can add YOLO class/position logic here.
+    현재 로직
+    - STOP_DISTANCE_CM 보다 가깝다: 멈춰
+    - 아니면 가라
     """
     if distance_cm is not None and distance_cm < STOP_DISTANCE_CM:
         return CMD_STOP
 
+    # if person detected in center and distance < 100:
+    #     STOP
+    # elif obstacle on left:
+    #     TURN_RIGHT
+    # elif obstacle on right:
+    #     TURN_LEFT
+    # else:
+    #     FORWARD
+
     return CMD_FORWARD
 
 
+#카메라 화면에 초음파 거리값을 출력
 def draw_distance(frame, distance_cm):
     if distance_cm is None:
         text = "Distance: -- cm"
