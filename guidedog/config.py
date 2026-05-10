@@ -44,6 +44,11 @@ COMMAND_INTERVAL_SEC = 0.2
 # 화면을 왼쪽/중앙/오른쪽 3구역으로 나눌 때 중앙 위험도를 더 크게 보기 위한 가중치
 CENTER_DANGER_WEIGHT = 2.0
 
+#중앙영역의 위험 점수가 0.5보다 클 경우에만 해당 영역을 장애물로 인식
+#0값이면 중앙 영역에 감지된 물체가 아무리 작거나 멀리 있더라도 로봇이 방향을 전환
+#중심 객체의 경계 상자 영역이 약 ​​5000픽셀보다 크면 해당 객체를 피하기 (box area = 5000 → danger = 0.5)
+CENTER_BLOCK_THRESHOLD = 0.5
+
 # 박스 크기를 위험도로 바꿀 때 나누는 값
 # 박스 면적을 그대로 위험도에 쓰면 값이 너무 큼
 # 값이 작을수록 box area가 danger에 더 크게 반영됨 danger = box_area / BOX_AREA_SCALE

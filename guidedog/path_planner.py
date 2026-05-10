@@ -5,6 +5,7 @@ from config import (
     AVOID_DISTANCE_CM,
     CENTER_DANGER_WEIGHT,
     BOX_AREA_SCALE,
+    CENTER_BLOCK_THRESHOLD
 )
 
 
@@ -83,6 +84,8 @@ class PathPlanner:
             else:
                 danger[zone] += danger_score
 
+            # 안할거면 그냥 danger[zone] += danger_score
+
         return danger
 
     def decide_command(self, detections, distance_cm):
@@ -101,7 +104,7 @@ class PathPlanner:
             danger["CENTER"] += 10.0
 
         # 3. 중앙이 막혔으면 왼쪽/오른쪽 중 더 안전한 쪽으로 회전
-        if danger["CENTER"] > 0:
+        if danger["CENTER"] > CENTER_BLOCK_THRESHOLD:
             if danger["LEFT"] < danger["RIGHT"]:
                 return "TURN_LEFT", danger
             elif danger["RIGHT"] < danger["LEFT"]:
