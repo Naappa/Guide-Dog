@@ -9,16 +9,53 @@ Original file is located at
 
 # config.py
 
+# 사용할 YOLO 모델 파일 경로
 MODEL_PATH = "yolo26n.pt"
 
+# 사용할 카메라 번호
+# 카메라,프레임 가로 세로, 버퍼 크기
 CAMERA_INDEX = 0
 FRAME_WIDTH = 320
 FRAME_HEIGHT = 240
 BUFFER_SIZE = 1
 
-IMG_SIZE = 320
-CONFIDENCE_THRESHOLD = 0.5
+# YOLO 모델 입력 이미지 크기
+IMG_SIZE = 320                # 객체 탐지 신뢰도 기준
+CONFIDENCE_THRESHOLD = 0.5    # 0.5면 confidence가 50% 이상인 객체만 사용
 
+# OpenCV 화면 창 이름
+# 출력 화면 창의 가로,세로 크기
 WINDOW_NAME = "Obstacle Detection"
 WINDOW_WIDTH = 360
 WINDOW_HEIGHT = 300
+
+# ==============================
+# Path planner / obstacle avoidance settings
+# ==============================
+
+# 초음파 센서 거리 기준(cm)
+STOP_DISTANCE_CM = 40.0       # 이 거리보다 가까우면 즉시 정지
+AVOID_DISTANCE_CM = 100.0     # 이 거리보다 가까우면 YOLO 박스 위치와 함께 회피 방향을 계산 예: 100cm 이내에 사람이 있으면 미리 왼쪽/오른쪽 회피 판단
+
+# 명령 최소 전송 간격(sec)
+# 0.2초면 초당 최대 5번 명령 전송
+COMMAND_INTERVAL_SEC = 0.2
+
+# 화면을 왼쪽/중앙/오른쪽 3구역으로 나눌 때 중앙 위험도를 더 크게 보기 위한 가중치
+CENTER_DANGER_WEIGHT = 2.0
+
+# 박스 크기를 위험도로 바꿀 때 나누는 값
+# 박스 면적을 그대로 위험도에 쓰면 값이 너무 큼
+# 값이 작을수록 box area가 danger에 더 크게 반영됨 danger = box_area / BOX_AREA_SCALE
+# 박스 면적 10000 정도를 위험도 1점
+BOX_AREA_SCALE = 10000.0
+
+# 피해야 할 클래스 이름
+# 현재 detector.py가 YOLO class_name을 문자열로 넘겨주므로 여기에 문자열로 작성
+DANGER_CLASSES = [
+    "person",
+    "dog",
+    "chair",
+    "table",
+    "bag",
+]

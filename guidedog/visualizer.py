@@ -63,3 +63,55 @@ def draw_fps(frame, fps):
 
 def show_frame(frame):
     cv2.imshow(WINDOW_NAME, frame)
+
+
+# 카메라 화면에 초음파 거리값을 출력
+def draw_distance(frame, distance_cm):
+    if distance_cm is None:
+        text = "Distance: -- cm"
+    else:
+        text = f"Distance: {distance_cm:.1f} cm"
+
+    cv2.putText(
+        frame,
+        text,
+        (20, 85),
+        cv2.FONT_HERSHEY_PLAIN,
+        2,
+        (255, 255, 255),
+        2
+    )
+    return frame
+
+
+def draw_command(frame, command, danger):
+    """
+    현재 이동 명령과 위험도를 화면에 출력.
+    """
+    cv2.putText(
+        frame,
+        f"CMD: {command}",
+        (20, 120),
+        cv2.FONT_HERSHEY_PLAIN,
+        2,
+        (0, 255, 255),
+        2
+    )
+
+    danger_text = (
+        f"L:{danger['LEFT']:.1f} "
+        f"C:{danger['CENTER']:.1f} "
+        f"R:{danger['RIGHT']:.1f}"
+    )
+
+    cv2.putText(
+        frame,
+        danger_text,
+        (20, 155),
+        cv2.FONT_HERSHEY_PLAIN,
+        1.5,
+        (255, 255, 0),
+        2
+    )
+
+    return frame
