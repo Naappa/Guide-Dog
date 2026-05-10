@@ -49,13 +49,3 @@ CENTER_DANGER_WEIGHT = 2.0
 # 값이 작을수록 box area가 danger에 더 크게 반영됨 danger = box_area / BOX_AREA_SCALE
 # 박스 면적 10000 정도를 위험도 1점
 BOX_AREA_SCALE = 10000.0
-
-# 피해야 할 클래스 이름
-# 현재 detector.py가 YOLO class_name을 문자열로 넘겨주므로 여기에 문자열로 작성
-DANGER_CLASSES = [
-    "person",
-    "dog",
-    "chair",
-    "table",
-    "bag",
-]

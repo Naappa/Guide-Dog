@@ -5,7 +5,6 @@ from config import (
     AVOID_DISTANCE_CM,
     CENTER_DANGER_WEIGHT,
     BOX_AREA_SCALE,
-    DANGER_CLASSES,
 )
 
 
@@ -30,7 +29,6 @@ class PathPlanner:
         self.avoid_distance_cm = AVOID_DISTANCE_CM
         self.center_danger_weight = CENTER_DANGER_WEIGHT
         self.box_area_scale = BOX_AREA_SCALE
-        self.danger_classes = set(DANGER_CLASSES)
 
     def get_zone(self, center_x):
         """
@@ -67,12 +65,6 @@ class PathPlanner:
         }
 
         for det in detections:
-            class_name = det.get("class_name")
-
-            # 피해야 하는 물체만 사용
-            if class_name not in self.danger_classes:
-                continue
-
             box = det.get("box")
             center = det.get("center")
 
