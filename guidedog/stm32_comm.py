@@ -42,7 +42,7 @@ class STM32Comm:
             timeout=self.timeout
         )
 
-        # Some STM32 boards reset when serial opens.
+        # Serila 통신 시작시 대기
         time.sleep(2)
 
         #별도 스레드 시작   

@@ -30,14 +30,18 @@ def decide_command(distance_cm, detections):
     if distance_cm is not None and distance_cm < STOP_DISTANCE_CM:
         return CMD_STOP
 
-    # if person detected in center and distance < 100:
-    #     STOP
-    # elif obstacle on left:
-    #     TURN_RIGHT
-    # elif obstacle on right:
-    #     TURN_LEFT
-    # else:
-    #     FORWARD
+    # if command == "FORWARD":
+    #     serial.write(b"F\n")
+    # elif command == "TURN_LEFT":
+    #     serial.write(b"L\n")
+    # elif command == "TURN_RIGHT":
+    #     serial.write(b"R\n")
+    # elif command == "STOP":
+    #     serial.write(b"S\n")
+    # elif command == "SLIGHT_LEFT":
+    #     serial.write(b"A\n")
+    # elif command == "SLIGHT_RIGHT":
+    #     serial.write(b"D\n")
 
     return CMD_FORWARD
 
